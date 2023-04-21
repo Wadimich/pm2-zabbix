@@ -47,19 +47,24 @@ var provider = new ZabbixDataProvider(sender);
 var monitor = new PM2ZabbixMonitor(tracker, provider, {
 	monitor: argv.monitor,
 	debug: argv.debug,
-	logger: logger
+	logger: logger,
+	processListInterval: 1000,
+	processManagerInterval: 1000
 });
 
-monitor.start().done(function() {
+monitor.start().done(function () {
 	if (argv.discover) {
 		var discoveryData = provider.getDiscoveryData();
 		process.stdout.write(JSON.stringify(discoveryData, null, '\t'));
 		process.exit(0);
 		return;
 	}
-
+	
 	if (!argv.discover && !argv.monitor) {
-		logger.warn({ event: 'pm2-zabbix#noWork', argv: process.argv }, 'Neither --discover nor --monitor was specified - exiting because we have nothing to do');
+		logger.warn({
+			event: 'pm2-zabbix#noWork',
+			argv: process.argv
+		}, 'Neither --discover nor --monitor was specified - exiting because we have nothing to do');
 		process.exit(0);
 		return;
 	}
