@@ -39,7 +39,8 @@ var logger = bunyan.createLogger({
 var sender = new ZabbixSender({
 	hostname: argv.hostname || hostname,
 	server: argv.server || undefined,
-	logger: logger
+	logger: logger,
+	// config:'/etc/zabbix/zabbix_agent2.conf'
 });
 var tracker = new PM2Tracker();
 var provider = new ZabbixDataProvider(sender);
